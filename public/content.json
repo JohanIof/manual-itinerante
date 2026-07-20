@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "index",
+    "title": "Bem-vindo ao Manual Itinerante",
+    "description": "Central de documentação de processos, manuais e guias da Itinerante.",
+    "body": "Manuais e procedimentos do setor jurídico.\n  \n  \n    Compatibilidade de software, guias de instalação e configuração.\n  \n  \n    Processos operacionais e fluxos de trabalho padronizados.\n  \n  \n    Pergunte qualquer coisa sobre a documentação e receba respostas inteligentes."
+  },
+  {
+    "slug": "juridico/introducao",
+    "title": "Introdução ao Jurídico",
+    "description": "Visão geral dos processos e procedimentos do setor jurídico.",
+    "body": "Setor Jurídico\n\nEsta seção contém a documentação de todos os processos do setor jurídico da Itinerante.\n\nO que você encontra aqui\nModelos de documentos — Templates padronizados para contratos, notificações e pareceres\nProcedimentos de compliance — Regras e processos para conformidade regulatória\nFluxos de aprovação — Etapas necessárias para aprovação de documentos legais\n\nFluxo geral\nRecebimento da demanda\nAnálise preliminar\nElaboração do documento\nRevisão interna\nAprovação final\nArquivamento\nNota: Esta seção será expandida com procedimentos detalhados. Consulte seu gestor para dúvidas imediatas."
+  },
+  {
+    "slug": "processos/fluxo-geral",
+    "title": "Fluxo Geral de Processos",
+    "description": "Visão geral dos fluxos de trabalho e processos operacionais da Itinerante.",
+    "body": "Processos Operacionais\n\nTodos os processos da Itinerante seguem um fluxo padronizado para garantir qualidade e rastreabilidade.\n\nEtapas do Fluxo\nAbertura — Registro da demanda no sistema\nTriagem — Classificação por prioridade e área responsável\nExecução — Realização das atividades necessárias\nRevisão — Verificação de qualidade e conformidade\nAprovação — Validação pelo responsável\nEncerramento — Arquivamento e documentação final\n\nPrioridades\n\nResponsabilidades\nSolicitante — Abre a demanda com todas as informações necessárias\nTriagem — Equipe responsável por classificar e direcionar\nExecutor — Realiza a atividade solicitada\nAprovador — Valida o resultado final\nDica: Sempre verifique se já existe documentação sobre o processo antes de abrir uma nova demanda."
+  },
+  {
+    "slug": "sobre",
+    "title": "Sobre a Itinerante",
+    "description": "Visão geral da documentação e como utilizá-la.",
+    "body": "O que é este manual?\n\nO Manual Itinerante é a central de documentação de processos da empresa. Aqui você encontra guias, manuais e procedimentos organizados por área.\n\nComo usar\nNavegue pela sidebar — Os manuais estão organizados por categoria: Jurídico, Software e Processos.\nUse a busca — O campo de busca no topo permite encontrar qualquer conteúdo rapidamente.\nPergunte à IA — O widget de perguntas com IA responde dúvidas com base no conteúdo deste site.\n\nOrganização\n\nContribuindo\n\nPara adicionar ou editar documentação, crie ou modifique arquivos  na pasta correspondente em . O site é reconstruído automaticamente a cada deploy."
+  },
+  {
+    "slug": "software/compatibilidade",
+    "title": "Compatibilidade de Software",
+    "description": "Requisitos de sistema e compatibilidade de software utilizados na Itinerante.",
+    "body": "Softwares Homologados\n\nAbaixo está a lista de softwares aprovados e suas versões compatíveis.\n\nSistemas Operacionais\n\nNavegadores\n\nFerramentas de Trabalho\nMicrosoft 365 — Versão desktop e web. Conta corporativa obrigatória.\nGoogle Workspace — Acesso via navegador homologado.\nSlack — Versão desktop 4.35+ ou web.\n\nInstalação\n\nPara solicitar instalação de software, abra um chamado no portal de TI informando:\nNome do software\nJustificativa de uso\nAprovação do gestor direto\nImportante: Não instale softwares não homologados sem aprovação prévia da TI."
+  }
+]
