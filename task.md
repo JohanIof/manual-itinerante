@@ -1,7 +1,0 @@
-- `[x]` Integrar Provedor de IA Alternativo (Groq) e Highlight
-  - `[x]` Atualizar `src/lib/ai-providers.ts` para suportar o Groq.
-  - `[x]` Atualizar o `SYSTEM_PROMPT` para gerar links com o formato `?highlight=termo`.
-  - `[x]` Criar o script `public/scripts/highlight.js` para ler a URL, fazer o scroll e injetar a tag de highlight temporário no DOM.
-  - `[x]` Inserir animações e estilos de fade-out no `src/styles/custom.css`.
-  - `[x]` Injetar o `highlight.js` globalmente no header via `astro.config.mjs`.
-  - `[x]` Testar o fluxo completo localmente (chat -> link -> highlight).
