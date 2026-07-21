@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # original project archive
 ManualItinerante.zip
+
+# IA local
+historico-IA/
+
+.gitignore

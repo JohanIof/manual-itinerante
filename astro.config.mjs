@@ -31,6 +31,10 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Sistemas',
+          items: [{ autogenerate: { directory: 'sistemas' } }],
+        },
+        {
           label: 'Jurídico',
           items: [{ autogenerate: { directory: 'juridico' } }],
         },
