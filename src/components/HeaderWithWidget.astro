@@ -17,10 +17,6 @@ const shouldRenderSearch =
 <div class="header">
 	<div class="title-wrapper sl-flex">
 		<SiteTitle />
-		<span class="dpe-badge sl-hidden sm:sl-inline-flex">
-			<span class="dpe-badge-dot"></span>
-			DPE-RR ITINERANTE
-		</span>
 	</div>
 	<div class="sl-flex print:hidden">
 		{shouldRenderSearch && <Search />}
@@ -71,7 +67,6 @@ const shouldRenderSearch =
 			margin: -0.25rem;
 			min-width: 0;
 			align-items: center;
-			gap: 0.75rem;
 		}
 
 		.right-group,

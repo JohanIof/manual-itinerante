@@ -115,42 +115,6 @@ header.header {
   gap: 0.5rem;
 }
 
-/* Institutional Badge in Header */
-.dpe-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  background: var(--sl-color-accent-low);
-  color: var(--sl-color-accent);
-  border: 1px solid var(--dpe-card-border);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-}
-
-.dpe-badge:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 10px var(--dpe-green-glow);
-}
-
-.dpe-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--sl-color-accent);
-  box-shadow: 0 0 6px var(--sl-color-accent);
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.6; }
-}
-
 /* ==========================================================================
    Ask Widget — Enhanced Modern Micro-Interactions
    ========================================================================== */
@@ -203,7 +167,7 @@ header.header {
 }
 
 .ask-widget-kbd {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   padding: 0.15rem 0.4rem;
   border-radius: 0.25rem;
   background: var(--sl-color-bg-inline-code);
@@ -283,7 +247,7 @@ header.header {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  padding: 0.5rem 1.1rem;
+  padding: 0.55rem 1.1rem;
   border-bottom: 1px solid var(--dpe-card-border);
   background: var(--sl-color-bg-sidebar);
 }
@@ -362,6 +326,32 @@ header.header {
   cursor: not-allowed;
 }
 
+/* Ask Widget Footer & Hint Area */
+.ask-widget-footer {
+  padding: 0.75rem 1.1rem !important;
+  background: var(--sl-color-bg-sidebar) !important;
+  border-top: 1px solid var(--dpe-card-border) !important;
+}
+
+.ask-widget-footer-text {
+  font-family: var(--sl-font, 'Inter', system-ui, sans-serif) !important;
+  font-size: 0.8125rem !important; /* 13px standard size */
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
+  color: var(--sl-color-gray-3) !important;
+  text-align: left !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+}
+
+.ask-widget-footer-text svg {
+  flex-shrink: 0;
+  color: var(--sl-color-accent);
+}
+
 /* ==========================================================================
    Homepage Starlight Cards & Hero Section
    ========================================================================== */
@@ -437,7 +427,7 @@ header.header {
   transform: translateY(-2px) !important;
 }
 
-/* Starlight Card Overhaul (Google/Microsoft Modern Card Style) */
+/* Starlight Card Overhaul (Clean SVG Icons & Modern Card Style) */
 .card-grid .card {
   background: var(--dpe-card-bg) !important;
   border: 1px solid var(--dpe-card-border) !important;
@@ -471,16 +461,23 @@ header.header {
   opacity: 1;
 }
 
+/* Crisp Vector SVG Icon Rendering */
 .card-grid .card .icon {
-  background: var(--sl-color-accent-low) !important;
+  width: 2rem !important;
+  height: 2rem !important;
   color: var(--sl-color-accent) !important;
-  padding: 0.6rem !important;
-  border-radius: 0.75rem !important;
-  transition: transform 0.3s ease !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: transform 0.3s ease, color 0.3s ease !important;
 }
 
 .card-grid .card:hover .icon {
-  transform: scale(1.1) rotate(-4deg) !important;
+  transform: scale(1.15) translateY(-2px) !important;
+  color: var(--sl-color-text-accent) !important;
 }
 
 .card-grid .card .title {

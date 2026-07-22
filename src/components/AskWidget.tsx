@@ -12,31 +12,26 @@ type WidgetState = 'idle' | 'loading' | 'success' | 'error';
 
 /**
  * Build context string that includes page URLs so the AI can reference them.
- * Each section is tagged with [PÁGINA: title | URL: /slug] so the AI knows
- * which page the content comes from and can create links.
  */
 function buildContextWithRefs(entries: ContentEntry[], query: string): string {
   const queryWords = query
     .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents for matching
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .split(/\s+/)
     .filter(w => w.length > 2);
 
-  // Score entries by keyword relevance
   const scored = entries.map(entry => {
     const text = `${entry.title} ${entry.description} ${entry.body}`
       .toLowerCase()
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     let score = 0;
     for (const word of queryWords) {
-      // Count occurrences
       let idx = 0;
       while ((idx = text.indexOf(word, idx)) !== -1) {
         score++;
         idx += word.length;
       }
     }
-    // Boost title/description matches
     const titleText = `${entry.title} ${entry.description}`
       .toLowerCase()
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -48,13 +43,12 @@ function buildContextWithRefs(entries: ContentEntry[], query: string): string {
 
   scored.sort((a, b) => b.score - a.score);
 
-  // Build context with page references
   const chunks: string[] = [];
   let totalLength = 0;
   const maxLength = 60_000;
 
   for (const { entry, score } of scored) {
-    if (score === 0 && chunks.length > 0) continue; // skip zero-score if we have matches
+    if (score === 0 && chunks.length > 0) continue;
     const url = entry.slug === 'index' ? '/' : `/${entry.slug}/`;
     const chunk = `[PÁGINA: ${entry.title} | URL: ${url}]\n${entry.body}`;
     if (totalLength + chunk.length > maxLength) break;
@@ -62,7 +56,6 @@ function buildContextWithRefs(entries: ContentEntry[], query: string): string {
     totalLength += chunk.length;
   }
 
-  // If nothing scored, include everything (truncated)
   if (chunks.length === 0) {
     for (const entry of entries) {
       const url = entry.slug === 'index' ? '/' : `/${entry.slug}/`;
@@ -78,7 +71,6 @@ function buildContextWithRefs(entries: ContentEntry[], query: string): string {
 
 /**
  * Convert markdown text to safe HTML.
- * Supports: bold, italic, code, headings, lists, links, line breaks.
  */
 function renderMarkdown(text: string): string {
   let html = text
@@ -164,10 +156,10 @@ export default function AskWidget() {
     return () => { cancelled = true; };
   }, []);
 
-  // Global Keyboard shortcut: Ctrl+K or Cmd+K to toggle AskWidget
+  // Keyboard shortcut: Ctrl + Shift + K or Cmd + Shift + K (to avoid colliding with Ctrl+K search)
   useEffect(() => {
     function handleGlobalKeyDown(e: KeyboardEvent) {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsOpen(prev => !prev);
       }
@@ -281,7 +273,7 @@ export default function AskWidget() {
         onClick={toggleOpen}
         aria-label="Abrir assistente de busca com IA"
         aria-expanded={isOpen}
-        title="Perguntar à IA (Ctrl + K)"
+        title="Perguntar à IA (Ctrl + Shift + K)"
         id="ask-widget-trigger"
       >
         <span class="ask-widget-trigger-sparkle">
@@ -290,7 +282,7 @@ export default function AskWidget() {
           </svg>
         </span>
         <span class="ask-widget-trigger-label">Perguntar à IA</span>
-        <span class="ask-widget-kbd">⌘K</span>
+        <span class="ask-widget-kbd">⌘⇧K</span>
       </button>
 
       {isOpen && (
@@ -392,19 +384,26 @@ export default function AskWidget() {
                 </button>
               </div>
             )}
-
-            {state === 'idle' && (
-              <div class="ask-widget-hint">
-                {loadError ? (
-                  <p>⚠️ Não foi possível carregar o conteúdo. Tente recarregar a página.</p>
-                ) : !content ? (
-                  <p>Carregando base de dados...</p>
-                ) : (
-                  <p>Selecione um tópico acima ou digite sua dúvida sobre os manuais da Itinerante.</p>
-                )}
-              </div>
-            )}
           </div>
+
+          {state === 'idle' && (
+            <div class="ask-widget-footer">
+              <p class="ask-widget-footer-text">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>
+                  {loadError
+                    ? 'Não foi possível carregar o conteúdo.'
+                    : !content
+                    ? 'Carregando base de dados...'
+                    : 'Selecione um tópico acima ou digite sua dúvida sobre os manuais.'}
+                </span>
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
