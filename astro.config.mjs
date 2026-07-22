@@ -17,6 +17,12 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Manual Itinerante',
+      logo: {
+        src: './public/logotipo-dpe-rr.webp', // Coloque o arquivo em src/assets/
+        alt: 'Logo DPE-RR',
+        replacesTitle: false, // Define se substitui ou fica ao lado do texto
+      },
+      favicon: './public/logotipo-dpe-rr.png', // Coloque o arquivo em src/assets/
       defaultLocale: 'root',
       locales: {
         root: { label: 'Português', lang: 'pt-BR' },
