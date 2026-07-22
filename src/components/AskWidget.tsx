@@ -282,7 +282,7 @@ export default function AskWidget() {
           </svg>
         </span>
         <span class="ask-widget-trigger-label">Perguntar à IA</span>
-        <span class="ask-widget-kbd">⌘⇧K</span>
+        <span class="ask-widget-kbd">Ctrl + Shift + K</span>
       </button>
 
       {isOpen && (

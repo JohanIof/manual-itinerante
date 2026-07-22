@@ -166,15 +166,20 @@ header.header {
   100% { transform: rotate(360deg) scale(1); }
 }
 
+/* Keyboard Shortcut Indicator Badge (Visível & Destaque) */
 .ask-widget-kbd {
-  font-size: 0.68rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
-  background: var(--sl-color-bg-inline-code);
-  color: var(--sl-color-gray-3);
-  font-family: monospace;
-  font-weight: 600;
-  border: 1px solid var(--dpe-card-border);
+  font-size: 0.75rem !important;
+  padding: 0.2rem 0.55rem !important;
+  border-radius: 0.375rem !important;
+  background: var(--sl-color-accent-low) !important;
+  color: var(--sl-color-accent) !important;
+  font-family: system-ui, -apple-system, monospace !important;
+  font-weight: 700 !important;
+  border: 1px solid var(--sl-color-accent) !important;
+  letter-spacing: 0.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Widget Panel */
@@ -335,7 +340,7 @@ header.header {
 
 .ask-widget-footer-text {
   font-family: var(--sl-font, 'Inter', system-ui, sans-serif) !important;
-  font-size: 0.8125rem !important; /* 13px standard size */
+  font-size: 0.8125rem !important;
   font-style: normal !important;
   font-weight: 400 !important;
   line-height: 1.45 !important;
@@ -427,7 +432,7 @@ header.header {
   transform: translateY(-2px) !important;
 }
 
-/* Starlight Card Overhaul (Clean SVG Icons & Modern Card Style) */
+/* Starlight Card Overhaul (Clean Vector SVG Icons Only, No Borders) */
 .card-grid .card {
   background: var(--dpe-card-bg) !important;
   border: 1px solid var(--dpe-card-border) !important;
@@ -461,21 +466,27 @@ header.header {
   opacity: 1;
 }
 
-/* Crisp Vector SVG Icon Rendering */
-.card-grid .card .icon {
-  width: 2rem !important;
-  height: 2rem !important;
+/* Clean SVG Icons without any background box or borders */
+.card-grid .card .icon,
+article.card .icon,
+.card .icon {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
   color: var(--sl-color-accent) !important;
   fill: currentColor !important;
   stroke: currentColor !important;
   background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
   padding: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   transition: transform 0.3s ease, color 0.3s ease !important;
 }
 
-.card-grid .card:hover .icon {
+.card-grid .card:hover .icon,
+article.card:hover .icon {
   transform: scale(1.15) translateY(-2px) !important;
   color: var(--sl-color-text-accent) !important;
 }
