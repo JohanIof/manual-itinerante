@@ -1,33 +1,33 @@
 ---
-title: Bem-vindo ao Manual Itinerante
-description: Central de documentação de processos, manuais e guias da Itinerante.
+title: Manual Itinerante DPE-RR
+description: Portal oficial de documentação de processos, sistemas e guias operacionais da Defensoria Pública do Estado de Roraima — Núcleo Itinerante.
 template: splash
 hero:
-  tagline: Todos os manuais e processos da Itinerante em um só lugar. Use a busca com IA para encontrar rapidamente o que precisa.
+  tagline: Base de conhecimento oficial e busca inteligente com IA para os processos e sistemas da Defensoria Itinerante de Roraima.
   actions:
-    - text: Começar a ler
+    - text: Explorar Documentação
       link: /sobre/
       icon: right-arrow
       variant: primary
-    - text: Perguntar à IA
-      link: '#'
-      icon: magnifier
+    - text: Guia dos Sistemas
+      link: /sistemas/introducao/
+      icon: open-book
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
+  <Card title="Sistemas & SOLAR" icon="laptop">
+    [Acessar Guia de Sistemas](/sistemas/introducao/) — Procedimentos do SOLAR, atendimento, triagem e navegação completa no sistema.
+  </Card>
   <Card title="Jurídico" icon="document">
-    Manuais e procedimentos do setor jurídico.
+    [Procedimentos Jurídicos](/juridico/introducao/) — Orientações operacionais, modelos de atendimento e fluxos para a equipe jurídica.
   </Card>
-  <Card title="Software" icon="laptop">
-    Compatibilidade de software, guias de instalação e configuração.
+  <Card title="Compatibilidade & Softwares" icon="setting">
+    [Configurações de Software](/software/compatibilidade/) — Homologação de navegadores (Edge/Chrome), certificados digitais e requisitos.
   </Card>
-  <Card title="Processos" icon="list-format">
-    Processos operacionais e fluxos de trabalho padronizados.
-  </Card>
-  <Card title="Busca com IA" icon="magnifier">
-    Pergunte qualquer coisa sobre a documentação e receba respostas inteligentes.
+  <Card title="Processos Operacionais" icon="list-format">
+    [Fluxos de Trabalho](/processos/fluxo-geral/) — Etapas padronizadas de abertura, triagem, execução e encerramento de demandas.
   </Card>
 </CardGrid>

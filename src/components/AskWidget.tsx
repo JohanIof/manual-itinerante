@@ -81,58 +81,39 @@ function buildContextWithRefs(entries: ContentEntry[], query: string): string {
  * Supports: bold, italic, code, headings, lists, links, line breaks.
  */
 function renderMarkdown(text: string): string {
-  // Escape HTML entities first
   let html = text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  // Process markdown patterns
   html = html
-    // Code blocks (```...```)
     .replace(/```[\s\S]*?```/g, (match) => {
       const code = match.slice(3, -3).replace(/^\w*\n/, '');
       return `<pre><code>${code}</code></pre>`;
     })
-    // Inline code
     .replace(/`([^`]+)`/g, '<code>$1</code>')
-    // Bold
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    // Italic
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    // Links [text](url) — make them clickable, navigating within the site
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, linkText, url) => {
-      // Internal links (starting with /) navigate directly
       if (url.startsWith('/')) {
         return `<a href="${url}" class="ask-widget-link" data-internal="true">${linkText}</a>`;
       }
       return `<a href="${url}" target="_blank" rel="noopener">${linkText}</a>`;
     })
-    // Headings
     .replace(/^#### (.+)$/gm, '<h5>$1</h5>')
     .replace(/^### (.+)$/gm, '<h4>$1</h4>')
     .replace(/^## (.+)$/gm, '<h3>$1</h3>')
     .replace(/^# (.+)$/gm, '<h2>$1</h2>')
-    // Unordered lists
     .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
-    // Ordered lists
     .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-    // Wrap consecutive <li> in <ul>
     .replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>')
-    // Horizontal rule / separator
     .replace(/^---$/gm, '<hr/>')
-    // Emoji section headers (📄, 📌, etc.)
     .replace(/^([\u{1F4C4}\u{1F4CC}\u{1F4D6}\u{1F517}\u{2139}\u{1F4A1}].+)$/gmu, '<p class="ask-widget-section-header">$1</p>')
-    // Paragraphs (double newline)
     .replace(/\n\n/g, '</p><p>')
-    // Single newline within paragraphs
     .replace(/\n/g, '<br/>');
 
-  // Wrap in paragraph tags
   html = `<p>${html}</p>`;
-  // Clean up empty paragraphs
   html = html.replace(/<p>\s*<\/p>/g, '');
-  // Fix nested block elements in paragraphs
   html = html.replace(/<p>\s*(<(?:h[2-5]|ul|ol|pre|hr|div|blockquote))/g, '$1');
   html = html.replace(/(<\/(?:h[2-5]|ul|ol|pre|hr|div|blockquote)>)\s*<\/p>/g, '$1');
 
@@ -150,6 +131,14 @@ export default function AskWidget() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
+
+  // Suggested prompt chips
+  const quickPrompts = [
+    'Como funciona a triagem no SOLAR?',
+    'Quais os requisitos do CRC-Jud?',
+    'Como configurar o Edge?',
+    'Fluxo de aprovação jurídica'
+  ];
 
   // Load content.json once
   useEffect(() => {
@@ -173,6 +162,18 @@ export default function AskWidget() {
     }
     loadContent();
     return () => { cancelled = true; };
+  }, []);
+
+  // Global Keyboard shortcut: Ctrl+K or Cmd+K to toggle AskWidget
+  useEffect(() => {
+    function handleGlobalKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsOpen(prev => !prev);
+      }
+    }
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
   // Focus input when panel opens
@@ -216,21 +217,20 @@ export default function AskWidget() {
     return () => el.removeEventListener('click', handleLinkClick);
   }, [isOpen]);
 
-  const handleSubmit = useCallback(async (e?: JSX.TargetedEvent<HTMLFormElement>) => {
-    if (e) e.preventDefault();
-    if (!question.trim() || !content || state === 'loading') return;
+  const handleSubmitWithQuestion = useCallback(async (qText: string) => {
+    if (!qText.trim() || !content || state === 'loading') return;
 
     setState('loading');
     setAnswer('');
     setErrorMsg('');
 
     try {
-      const contextStr = buildContextWithRefs(content, question);
+      const contextStr = buildContextWithRefs(content, qText);
       
       const res = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question.trim(), context: contextStr }),
+        body: JSON.stringify({ question: qText.trim(), context: contextStr }),
       });
 
       if (!res.ok) {
@@ -250,7 +250,17 @@ export default function AskWidget() {
       setErrorMsg(err.message || 'Erro de conexão. Tente novamente.');
       setState('error');
     }
-  }, [question, content, state]);
+  }, [content, state]);
+
+  const handleSubmit = useCallback((e?: JSX.TargetedEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault();
+    handleSubmitWithQuestion(question);
+  }, [question, handleSubmitWithQuestion]);
+
+  const handleChipClick = useCallback((chipText: string) => {
+    setQuestion(chipText);
+    handleSubmitWithQuestion(chipText);
+  }, [handleSubmitWithQuestion]);
 
   const handleClear = useCallback(() => {
     setQuestion('');
@@ -271,13 +281,16 @@ export default function AskWidget() {
         onClick={toggleOpen}
         aria-label="Abrir assistente de busca com IA"
         aria-expanded={isOpen}
-        title="Perguntar à IA"
+        title="Perguntar à IA (Ctrl + K)"
         id="ask-widget-trigger"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
+        <span class="ask-widget-trigger-sparkle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+          </svg>
+        </span>
         <span class="ask-widget-trigger-label">Perguntar à IA</span>
+        <span class="ask-widget-kbd">⌘K</span>
       </button>
 
       {isOpen && (
@@ -287,7 +300,7 @@ export default function AskWidget() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
               </svg>
-              <span>Assistente Itinerante</span>
+              <span>Assistente Itinerante DPE-RR</span>
             </div>
             <button class="ask-widget-close" onClick={() => setIsOpen(false)} aria-label="Fechar">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -297,13 +310,28 @@ export default function AskWidget() {
             </button>
           </div>
 
+          {state === 'idle' && (
+            <div class="ask-widget-chips">
+              {quickPrompts.map((prompt) => (
+                <button
+                  key={prompt}
+                  class="ask-widget-chip"
+                  onClick={() => handleChipClick(prompt)}
+                  type="button"
+                >
+                  ⚡ {prompt}
+                </button>
+              ))}
+            </div>
+          )}
+
           <form class="ask-widget-form" onSubmit={handleSubmit}>
             <div class="ask-widget-input-group">
               <input
                 ref={inputRef}
                 type="text"
                 class="ask-widget-input"
-                placeholder="Ex: Quais softwares são homologados?"
+                placeholder="Ex: Como acessar o SOLAR?"
                 value={question}
                 onInput={(e) => setQuestion((e.target as HTMLInputElement).value)}
                 disabled={state === 'loading'}
@@ -336,7 +364,7 @@ export default function AskWidget() {
                 <div class="ask-widget-loading-dots">
                   <span /><span /><span />
                 </div>
-                <p>Buscando nos manuais...</p>
+                <p>Buscando na documentação DPE-RR...</p>
               </div>
             )}
 
@@ -370,14 +398,9 @@ export default function AskWidget() {
                 {loadError ? (
                   <p>⚠️ Não foi possível carregar o conteúdo. Tente recarregar a página.</p>
                 ) : !content ? (
-                  <p>Carregando conteúdo...</p>
+                  <p>Carregando base de dados...</p>
                 ) : (
-                  <>
-                    <p>Pergunte qualquer coisa sobre os manuais da Itinerante.</p>
-                    <p class="ask-widget-hint-examples">
-                      Exemplos: <em>"Quais softwares são homologados?"</em>, <em>"Como funciona o fluxo de aprovação jurídica?"</em>
-                    </p>
-                  </>
+                  <p>Selecione um tópico acima ou digite sua dúvida sobre os manuais da Itinerante.</p>
                 )}
               </div>
             )}
