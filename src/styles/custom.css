@@ -182,18 +182,47 @@ header.header {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
+/* Keep the assistant trigger usable without crowding the mobile header. */
+@media (max-width: 49.99rem) {
+  .ask-widget-trigger {
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .ask-widget-kbd {
+    display: none !important;
+  }
+}
+
+@media (max-width: 40rem) {
+  .ask-widget-trigger {
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+  }
+
+  .ask-widget-trigger-label {
+    display: none;
+  }
+}
+
 /* Widget Panel */
 .ask-widget-panel {
   position: absolute;
   top: calc(100% + 0.6rem);
   right: 0;
-  width: min(440px, 92vw);
+  width: min(34rem, calc(100vw - 2rem));
+  max-height: calc(100vh - var(--sl-nav-height) - 1.5rem);
+  max-height: calc(100dvh - var(--sl-nav-height) - 1.5rem);
   z-index: 200;
   background: var(--sl-color-bg);
   border: 1px solid var(--dpe-card-hover-border);
   border-radius: 1.25rem;
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.35), 0 0 20px var(--dpe-green-glow);
   backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   animation: askWidgetSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -329,6 +358,12 @@ header.header {
 .ask-widget-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.ask-widget-response {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Ask Widget Footer & Hint Area */
